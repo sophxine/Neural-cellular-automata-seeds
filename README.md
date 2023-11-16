@@ -6,7 +6,7 @@ It can be used for exploring rules, because the neural network learns rules the 
 It is not a neural cellular automata, it places cells on the grid and for this example it learns that it needs to have a 3*3 neighborhood.
 I call the model weights "seeds", and the specific combination of seeds and threshold "rules".
 
-The rule it approximates in this example is B2/S23, it can learn to near perfectly simulate it in around 15 training phases with the default soup size and generations.
+The rule it approximates in this example is B2/S23, it can learn to near perfectly simulate it in around 15 training phases with the default soup size, neural network architecture and generations.
 
 # Controls
 Left mouse button: draw
