@@ -78,7 +78,7 @@ slider_height = 10
 slider_color = (0, 128, 255)
 
 # Set up font
-font = pygame.font.Font(None, 16)
+font = pygame.font.Font(None, 32)
 
 # Function to draw the float slider
 def draw_slider():
