@@ -1,7 +1,6 @@
 
 # The rule it approximates in this example is B2/S23
 
-
 # Tips:
 # If it's a lot too explosive or sparse consider modifying the threshold for exploring, though you can also explore explosive/sparse seeds changing the threshold. You can be more exact than the slider by modifying the threshold in the code.InteractiveInterpreter
 # If you find a seed you find interesting don't forget to press 's' to save!
@@ -17,12 +16,9 @@
 # Saved model should be named the threshold it is at because it might depend on it.
 # Load: loads a save from the folder under a name you pick, if there is none it asks you to retype. It also asks for you to set a threshold.
 
-
 # Option to display training in matplot
 # Option to start training with a saved model at start
 # Options to force symmetry
-
-
 
 import numpy as np
 import tensorflow as tf
@@ -72,7 +68,6 @@ grid = np.random.choice([0, 1], size=(GRID_HEIGHT, GRID_WIDTH)).astype(np.uint8)
 # Create the pygame window
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Neural Cellular Automata Seeds")
-
 clock = pygame.time.Clock()
 
 # Set up slider parameters
@@ -104,9 +99,7 @@ def draw_on_grid(mouse_pos, value=1):
 
     grid[y, x] = value  # Set the cell at the clicked position
 
-
 draw_radius = 0
-
 # Function to draw on the grid with a specified radius(not working)
 def draw_on_grid_with_radius(mouse_pos, value=1, radius=1):
     x, y = mouse_pos
@@ -120,8 +113,6 @@ def draw_on_grid_with_radius(mouse_pos, value=1, radius=1):
             if 0 <= i < GRID_WIDTH and 0 <= j < GRID_HEIGHT:
                 grid[j, i] = value
 
-
-
 # Simulate a cellular automata soup for specified amount of generations
 initial_states = [grid.copy()]
 for _ in range(generations):
@@ -132,11 +123,9 @@ for _ in range(generations):
             if grid[y, x] == 1:
                 if total_neighbors in (2, 3):
                     next_grid[y, x] = 1
-
             else:
                 if total_neighbors ==2: #Set this to 3 for Conway's Game of Life
-                    next_grid[y, x] = 1
-            
+                    next_grid[y, x] = 1            
     grid = next_grid.copy()
     initial_states.append(grid.copy())
 
@@ -144,11 +133,11 @@ for _ in range(generations):
 training_data = np.array(initial_states[:-1])
 target_data = np.array(initial_states[1:])
 
+
 #To predict for several generations(i.e 3) in the future set it like this:
 
 #training_data = np.array(initial_states[:-3])  
 #target_data = np.array(initial_states[3:])
-
 
 # Start training based on the generated generations
 model.fit(training_data[..., np.newaxis], target_data[..., np.newaxis], epochs=trainingphases, batch_size=1, verbose=1)
@@ -212,10 +201,7 @@ while running:
             if event.key == pygame.K_p:  
                 draw_radius += 1
             elif event.key == pygame.K_m:  
-                draw_radius = max(1, draw_radius - 1)
-
-        
-
+                draw_radius = max(1, draw_radius - 1)        
     if clear_grid:
         screen.fill(WHITE)
         clear_grid = False
