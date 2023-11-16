@@ -9,8 +9,8 @@ I call the model weights "seeds", and the specific combination of seeds and thre
 The rule it approximates in this example is B2/S23, it can learn to near perfectly simulate it in around 15 training phases with the default soup size, neural network architecture and generations.
 
 # Controls
-#Left mouse button: draw
-#Right mouse button: erase
-#Space: pause/unpause
-#S: save model with the name model_weights
-#Tab: simulate a new soups
+1. Left mouse button: draw
+2. Right mouse button: erase
+3. Space: pause/unpause
+4. S: save model with the name model_weights
+5. Tab: simulate a new soups
