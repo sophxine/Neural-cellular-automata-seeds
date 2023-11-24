@@ -1,9 +1,21 @@
+#Cellular automata exploration using a grid-based neural network pattern approximation
 
 # The rule it approximates in this example is B2/S23
 
+# This neural network can tries to approximate a two state cellular automata rule(any kind ofrule works), and create variations of them with a threshold. It can be used for exploring rules, because the neural network learns rules the patterns exist in and can create many different seeds.
+# It is not a neural cellular automata, it places cells on the grid and for this example it learns that it needs to have a 3*3 neighborhood
+# I call the model weights "seeds", and the specific combination of seeds and threshold "rules".
+
+# Controls:
+# Left mouse button: draw
+# Right mouse button: erase
+# Space: pause/unpause
+# S: save model with the name model_weights
+# Tab: simulate a new soups
+
 # Tips:
-# If it's a lot too explosive or sparse consider modifying the threshold for exploring, though you can also explore explosive/sparse seeds changing the threshold. You can be more exact than the slider by modifying the threshold in the code.InteractiveInterpreter
-# If you find a seed you find interesting don't forget to press 's' to save!
+# If it's a lot too explosive or sparse consider modifying the threshold for exploring, though you can also explore explosive/sparse seeds changing the threshold. You can be more exact than the slider by modifying the threshold in the code.
+# If you find a seed you find interesting that you want to explore don't forget to press 's' to save!
 
 
 # Todo:
@@ -16,9 +28,12 @@
 # Saved model should be named the threshold it is at because it might depend on it.
 # Load: loads a save from the folder under a name you pick, if there is none it asks you to retype. It also asks for you to set a threshold.
 
-# Option to display training in matplot
+
+# Option to display training in matplot and loss chart
 # Option to start training with a saved model at start
-# Options to force symmetry
+# Options to force symmetry while training
+
+
 
 import numpy as np
 import tensorflow as tf
@@ -26,7 +41,7 @@ import pygame
 
 #Change these to finetune it
 threshold = 0.65 # Initial threshold for how likely a cells are to be created, lower values is more cells. This value does not affect the training, it only affects the simulation.
-generations = 11 # Generati0466ons to simulate
+generations = 11 # Generations to simulate
 trainingphases=9 # How long to train
 
 
@@ -58,8 +73,7 @@ model = tf.keras.Sequential([
 # Compile the model
 # For the optimizer adam and nadam are suitable
 # For the loss function BCE and MeanSquaredError are suitable
-model.compile(optimizer='adam', loss='binary_crossentropy')
-
+model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss='binary_crossentropy')
 
 
 # Create the grid with random values
@@ -68,6 +82,7 @@ grid = np.random.choice([0, 1], size=(GRID_HEIGHT, GRID_WIDTH)).astype(np.uint8)
 # Create the pygame window
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Neural Cellular Automata Seeds")
+
 clock = pygame.time.Clock()
 
 # Set up slider parameters
@@ -113,25 +128,29 @@ def draw_on_grid_with_radius(mouse_pos, value=1, radius=1):
             if 0 <= i < GRID_WIDTH and 0 <= j < GRID_HEIGHT:
                 grid[j, i] = value
 
-# Simulate a cellular automata soup for specified amount of generations
-initial_states = [grid.copy()]
-for _ in range(generations):
-    next_grid = np.zeros_like(grid)
-    for y in range(GRID_HEIGHT):
-        for x in range(GRID_WIDTH):
-            total_neighbors = np.sum(grid[max(0, y - 1):min(GRID_HEIGHT, y + 2), max(0, x - 1):min(GRID_WIDTH, x + 2)]) - grid[y, x]
-            if grid[y, x] == 1:
-                if total_neighbors in (2, 3):
-                    next_grid[y, x] = 1
-            else:
-                if total_neighbors ==2: #Set this to 3 for Conway's Game of Life
-                    next_grid[y, x] = 1            
-    grid = next_grid.copy()
-    initial_states.append(grid.copy())
+# Function to generate the dataset for training
+# Simulates a cellular automata soup for specified amount of generations, but could be many more things.
+def generate_dataset(generations):
+    global grid
+    initial_states = [grid.copy()]
+    for _ in range(generations):
+        next_grid = np.zeros_like(grid)
+        for y in range(GRID_HEIGHT):
+            for x in range(GRID_WIDTH):
+                total_neighbors = np.sum(grid[max(0, y - 1):min(GRID_HEIGHT, y + 2), max(0, x - 1):min(GRID_WIDTH, x + 2)]) - grid[y, x]
+                if grid[y, x] == 1:
+                    if total_neighbors in (2, 3):
+                        next_grid[y, x] = 1
+                else:
+                    if total_neighbors == 2:  # Set this to 3 for Conway's Game of Life
+                        next_grid[y, x] = 1            
+        grid = next_grid.copy()
+        initial_states.append(grid.copy())
+    return np.array(initial_states[:-1]), np.array(initial_states[1:])
+
 
 # Reshape the states for training
-training_data = np.array(initial_states[:-1])
-target_data = np.array(initial_states[1:])
+training_data, target_data = generate_dataset(generations)
 
 
 #To predict for several generations(i.e 3) in the future set it like this:
@@ -196,7 +215,6 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_s:
                 model.save_weights(f"model_weights.h5")
-
         if event.type == pygame.KEYDOWN: #Not working
             if event.key == pygame.K_p:  
                 draw_radius += 1
@@ -209,7 +227,6 @@ while running:
         if not drawing_paused and not simulation_paused:
             predicted_state = model.predict(np.expand_dims(grid, axis=(0, -1)))[0, :, :, 0]
             grid = np.where(predicted_state > threshold, 1, 0)
-
         screen.fill(WHITE)
         for y in range(GRID_HEIGHT):
             for x in range(GRID_WIDTH):
