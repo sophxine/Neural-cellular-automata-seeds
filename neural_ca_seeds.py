@@ -1,11 +1,5 @@
 #Cellular automata exploration using a grid-based neural network pattern approximation
 
-# The rule it approximates in this example is B2/S23
-
-# This neural network can tries to approximate a two state cellular automata rule(any kind ofrule works), and create variations of them with a threshold. It can be used for exploring rules, because the neural network learns rules the patterns exist in and can create many different seeds.
-# It is not a neural cellular automata, it places cells on the grid and for this example it learns that it needs to have a 3*3 neighborhood
-# I call the model weights "seeds", and the specific combination of seeds and threshold "rules".
-
 # Controls:
 # Left mouse button: draw
 # Right mouse button: erase
