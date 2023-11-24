@@ -84,8 +84,7 @@ def draw_slider():
     text = font.render(f"Threshold: {threshold:.2f}", True, (0, 128, 255))
     screen.blit(text, (slider_x, slider_y - 30))
 
-# Compile the model
-model.compile(optimizer='adam', loss='binary_crossentropy')
+#Main loop
 running = True
 clear_grid = False
 drawing = False  
