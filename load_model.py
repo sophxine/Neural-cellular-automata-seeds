@@ -1,4 +1,11 @@
-#To use this script enter the filename of your model in loaded_model.
+# To use this script enter the filename of your model in loaded_model.
+
+# Controls:
+# Left mouse button: draw
+# Right mouse button: erase
+# Space: pause/unpause
+# S: save model with the name model_weights
+# Tab: simulate a new soups
 
 import numpy as np
 import tensorflow as tf
@@ -8,7 +15,8 @@ import numpy as np
 import tensorflow as tf
 import pygame
 
-threshold = 0.909
+threshold = 0.909 #Initial threshold (Can be more values than the slider)
+
 
 # Constants
 WIDTH, HEIGHT = 800, 600
@@ -57,7 +65,7 @@ model = tf.keras.Sequential([
     tf.keras.layers.Conv2D(1, (3, 3), activation='sigmoid', padding='same')
 ])
 model.compile(optimizer='adam', loss='binary_crossentropy')
-model.load_weights("cgol.h5")
+model.load_weights("model_weights.h5")
 
 # Function to draw on the grid
 def draw_on_grid(mouse_pos, value=1):
