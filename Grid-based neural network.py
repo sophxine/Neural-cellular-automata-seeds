@@ -1,3 +1,5 @@
+# It creates cellular automata-like patterns, but it is more general than cellular automata since it can consider the grid as a whole.
+
 import numpy as np
 import tensorflow as tf
 import pygame
@@ -20,14 +22,14 @@ BLACK = (0, 0, 0)
 # Create the grid with random values
 grid = np.random.choice([0, 1], size=(GRID_HEIGHT, GRID_WIDTH), p=[0.7, 0.3]).astype(np.uint8)
 
-# Define the convolution kernel for cellular automata
+# Define the convolution kernel
 kernel = np.array([[1, 1, 1],
                    [1, 0, 1],
                    [1, 1, 1]])
 
 # Create the pygame window
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Cellular Automata")
+pygame.display.set_caption("Grid-based neural network")
 
 clock = pygame.time.Clock()
 
