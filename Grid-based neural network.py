@@ -14,7 +14,7 @@ CELL_SIZE = 10
 GRID_WIDTH = WIDTH // CELL_SIZE
 GRID_HEIGHT = HEIGHT // CELL_SIZE
 FPS = 60
-threshold=0.999
+threshold=0.500
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
