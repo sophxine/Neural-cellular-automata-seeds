@@ -1,4 +1,4 @@
-# This neural network creates cellular automata-like patterns, but it is more general than cellular automata since it can consider the grid as a whole.
+
 
 import numpy as np
 import tensorflow as tf
