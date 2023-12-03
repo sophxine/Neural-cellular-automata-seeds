@@ -1,6 +1,7 @@
 # Neural cellular automata seeds
 
 The web version has a memory leakage issue so if you use it proceed with caution, it should stop before crashing the browser though.
+Flashing can occur in all versions, except NCAv1 when it is unmodified.
 
 This convolutional neural network is a simple neural cellular automata that tries to approximate a two state cellular automata rule(any kind of rule works), and create variations of them with a threshold. For example it can learn the rules of Conway's Game of Life as if it was Conway's Game of Life.
 
