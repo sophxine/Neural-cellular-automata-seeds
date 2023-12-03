@@ -1,4 +1,4 @@
-# Cellular automata exploration using a grid-based neural network pattern approximation
+# Cellular automata exploration using a neural cellular automata
 
 # Can have flashing, especially when it's not trained much, the default settings doesn't cause flashing.
 
