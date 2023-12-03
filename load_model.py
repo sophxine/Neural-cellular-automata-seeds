@@ -1,4 +1,5 @@
 # To use this script enter the filename of your model in loaded_model.
+# Remember to change the model architecture to the one you used to create it.
 
 # Controls:
 # Left mouse button: draw
