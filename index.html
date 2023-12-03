@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid-based Neural Network</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
+</head>
+<body>
+  
+  <p id="thresholdvalue">0.5</p>
+  <input
+  type="range"
+  id="thresholdSlider"
+  min="0"
+  max="1"
+  step="0.01"
+  value="0.5"
+  style="position: absolute; left: 20px; top: 40px; width: 100px;"
+/>
+
+  <canvas id="canvas" width="800" height="600"></canvas>
+
+  <script>
+
+const WIDTH = 805, HEIGHT = 605;
+const CELL_SIZE = 4;
+const GRID_WIDTH = Math.floor(WIDTH / CELL_SIZE);
+const GRID_HEIGHT = Math.floor(HEIGHT / CELL_SIZE);
+const FPS = 60;
+const thresholdSlider = document.getElementById('thresholdSlider');
+
+let threshold = parseFloat(thresholdSlider.value);
+
+
+thresholdSlider.addEventListener('input', (event) => {
+  threshold = parseFloat(event.target.value);
+
+  // Update the displayed threshold value in the <p> element
+  document.getElementById('thresholdvalue').textContent = threshold.toFixed(2);
+});
+
+const WHITE = [255, 255, 255];
+const BLACK = [0, 0, 0];
+
+let grid = Array.from({ length: GRID_HEIGHT }, () => Array.from({ length: GRID_WIDTH }, () => Math.random() < 0.3 ? 1 : 0));
+
+const kernel = [
+  [1, 1, 1],
+  [1, 0, 1],
+  [1, 1, 1]
+];
+
+const canvas = document.createElement('canvas');
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
+document.body.appendChild(canvas);
+const ctx = canvas.getContext('2d');
+
+const model = tf.sequential();
+model.add(tf.layers.inputLayer({ inputShape: [GRID_HEIGHT, GRID_WIDTH, 1] }));
+model.add(tf.layers.conv2d({ filters: 16, kernelSize: 3, activation: 'relu', padding: 'same' }));
+model.add(tf.layers.conv2d({ filters: 16, kernelSize: 3, activation: 'swish', padding: 'same' }));
+model.add(tf.layers.conv2d({ filters: 1, kernelSize: 3, activation: 'sigmoid', padding: 'same' }));
+
+function drawOnGrid(mousePos, value = 1) {
+  const x = Math.floor(mousePos[0] / CELL_SIZE);
+  const y = Math.floor(mousePos[1] / CELL_SIZE);
+
+  // Check if the indices are within the valid range
+  if (y >= 0 && y < GRID_HEIGHT && x >= 0 && x < GRID_WIDTH) {
+    grid[y][x] = value;
+  }
+}
+drawRadius  = 0
+function drawOnGridWithRadius(mousePos, value = 1, radius = 1) {
+  const x = Math.floor(mousePos[0] / CELL_SIZE);
+  const y = Math.floor(mousePos[1] / CELL_SIZE);
+
+  for (let i = Math.max(0, x - radius); i < Math.min(GRID_WIDTH, x + radius + 1); i++) {
+    for (let j = Math.max(0, y - radius); j < Math.min(GRID_HEIGHT, y + radius + 1); j++) {
+      grid[j][i] = value;
+    }
+  }
+}
+
+
+
+
+let running = true;
+let clearGrid = false;
+let drawing = false;
+let drawingPaused = false;
+let simulationPaused = false;
+let manualPause = false;
+let dragging = false;
+
+function handleMouseDown(event) {
+  if (sliderX <= event.clientX && event.clientX <= sliderX + sliderWidth && sliderY <= event.clientY && event.clientY <= sliderY + sliderHeight) {
+    dragging = true;
+  }
+  if (event.button === 0) {
+    drawing = true;
+    drawOnGridWithRadius([event.clientX, event.clientY], 1, drawRadius);
+    drawingPaused = true;
+    simulationPaused = true;
+  } else if (event.button === 2) {
+    drawing = true;
+    drawOnGridWithRadius([event.clientX, event.clientY], 0, drawRadius);
+    drawingPaused = true;
+    simulationPaused = true;
+  }
+}
+
+function handleMouseUp(event) {
+  if (event.button === 0 || event.button === 2) {
+    drawing = false;
+    drawingPaused = false;
+    if (!manualPause) {
+      simulationPaused = false;
+    }
+  }
+}
+
+function handleMouseMove(event) {
+  if (dragging) {
+    threshold = (event.clientX - sliderX) / sliderWidth;
+    threshold = Math.min(Math.max(threshold, 0), 1);
+  }
+  if (drawing) {
+    if (event.buttons === 1) {
+      drawOnGrid([event.clientX, event.clientY]);
+    } else if (event.buttons === 2) {
+      drawOnGrid([event.clientX, event.clientY], 0);
+    }
+  }
+}
+
+// Add these variables to your existing code
+let thresholdChangeRate = 0.1; // Initial threshold change rate
+
+function handleKeyDown(event) {
+  if (event.key === ' ') {
+    simulationPaused = !simulationPaused;
+    manualPause = simulationPaused;
+  } else if (event.key === 'c') {
+    grid = Array.from({ length: GRID_HEIGHT }, () => Array.from({ length: GRID_WIDTH }, () => 0));
+    clearGrid = true;
+  } else if (event.key === 'Tab') {
+    event.preventDefault();
+    grid = Array.from({ length: GRID_HEIGHT }, () => Array.from({ length: GRID_WIDTH }, () => Math.random() < 0.5 ? 1 : 0));
+  } else if (event.key === 's') {
+    model.save(`localstorage://model`);
+  } else if (event.key === 'p') {
+    drawRadius++;
+  } else if (event.key === 'm') {
+    drawRadius = Math.max(1, drawRadius - 1);
+  } else if (event.key === 'q') {
+    // Increase threshold
+    threshold = Math.min(threshold + thresholdChangeRate, 1.0);
+    document.getElementById('thresholdvalue').textContent = threshold.toFixed(3);
+  } else if (event.key === '1') {
+    // Decrease threshold
+    threshold = Math.max(threshold - thresholdChangeRate, 0.0);
+    document.getElementById('thresholdvalue').textContent = threshold.toFixed(3);
+  } else if (event.key === '2') {
+    // Decrease threshold change rate
+    thresholdChangeRate = Math.max(thresholdChangeRate / 1.1, 0.0001);
+  } else if (event.key === 'w') {
+    // Increase threshold change rate
+    thresholdChangeRate = Math.min(thresholdChangeRate * 1.1, 1.0);
+  }
+}
+
+
+
+
+
+
+function update() {
+  if (clearGrid) {
+    ctx.fillStyle = `rgb(${WHITE[0]}, ${WHITE[1]}, ${WHITE[2]})`;
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    clearGrid = false;
+  } else {
+    if (!drawingPaused && !simulationPaused) {
+      const reshapedGrid = tf.tensor4d(grid.flat().flat(), [1, GRID_HEIGHT, GRID_WIDTH, 1]);
+
+      const predictedState = model.predict(reshapedGrid).dataSync();
+
+
+
+
+      for (let i = 0; i < GRID_HEIGHT; i++) {
+        for (let j = 0; j < GRID_WIDTH; j++) {
+          grid[i][j] = predictedState[i * GRID_WIDTH + j] > threshold ? 1 : 0;
+        }
+      }
+    }
+    ctx.fillStyle = `rgb(${WHITE[0]}, ${WHITE[1]}, ${WHITE[2]})`;
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        if (grid[y][x] === 1) {
+          ctx.fillStyle = `rgb(${BLACK[0]}, ${BLACK[1]}, ${BLACK[2]})`;
+          ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        }
+      }
+    }
+  }
+  requestAnimationFrame(update);
+}
+
+canvas.addEventListener('mousedown', handleMouseDown);
+canvas.addEventListener('mouseup', handleMouseUp);
+canvas.addEventListener('mousemove', handleMouseMove);
+document.addEventListener('keydown', handleKeyDown);
+
+update();
+  </script>
+</body>
+</html>
