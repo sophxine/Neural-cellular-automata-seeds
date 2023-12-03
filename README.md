@@ -11,9 +11,10 @@ I call the model weights "seeds", and the specific combination of seeds and thre
 
 The rule it approximates in this example is B2/S23, it can learn to near perfectly simulate it in around 15 training phases with the default soup size, neural network architecture and generations.
 
-Loading only works as intended for models in NCAv1.py
+Loading only works as intended for models in NCAv1.py.
 
-(Currently drawing and erasing doesnt work on the website version, and you cant save it)
+The web version has a few differences from the python versions.
+Currently drawing and erasing doesnt work on the website version, and you cant save it.
 
 
 # Controls 
