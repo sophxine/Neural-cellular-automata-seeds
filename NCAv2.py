@@ -1,4 +1,4 @@
-#Neural Cellular Automata using agents that can create or kill cells, it seems to create more complex patterns.
+#Neural Cellular Automata exploration using agents that can create or kill cells, it seems to create more complex patterns.
 
 import numpy as np
 import tensorflow as tf
