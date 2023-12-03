@@ -45,7 +45,7 @@ kernel = np.array([[1, 1, 1],
 
 # Create the pygame window
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Grid-based neural network")
+pygame.display.set_caption("Multi state NCA")
 
 clock = pygame.time.Clock()
 
