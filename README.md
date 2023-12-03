@@ -9,11 +9,16 @@ I call the model weights "seeds", and the specific combination of seeds and thre
 
 The rule it approximates in this example is B2/S23, it can learn to near perfectly simulate it in around 15 training phases with the default soup size, neural network architecture and generations.
 
+(Currently drawing and erasing doesnt work on the website version, and you cant save it)
 
-# Controls
+# Controls 
 1. Left mouse button: draw
 2. Right mouse button: erase
 3. Space: pause/unpause
 4. S: save model with the name model_weights
 5. Tab: simulate a new soups
 6. C: clear grid
+7. 1: increase threshold - less cells
+8. q: decrease threshold - more cells
+9. 2: increase threshold change rate
+11. w: decrease threshold change rate
