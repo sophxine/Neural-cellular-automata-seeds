@@ -25,7 +25,7 @@ grid = np.random.choice([0, 1], size=(GRID_HEIGHT, GRID_WIDTH), p=[0.7, 0.3]).as
 
 # Create the pygame window
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Agent-based neural network")
+pygame.display.set_caption("Agent-based neural cellular automata")
 
 clock = pygame.time.Clock()
 
