@@ -24,7 +24,7 @@ Currently drawing and erasing doesnt work on the website version, and you cant s
 4. S: save model with the name model_weights
 5. Tab: simulate a new soups
 6. C: clear grid
-7. 1: increase threshold - less cells
-8. q: decrease threshold - more cells
+7. 1: increase threshold - less black cells 
+8. q: decrease threshold - more white cells
 9. 2: increase threshold change rate
 11. w: decrease threshold change rate
