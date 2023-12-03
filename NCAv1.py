@@ -17,8 +17,8 @@
 # S: save model with the name model_weights
 # Tab: simulate a new soups
 # C: clear grid
-# Q: Increase threshold to have less cells
 # 1: Decrease threshold to have more cells
+# Q: Increase threshold to have less cells
 # 2: Increase threshold change rate to change the threshold more
 # W: Decrease threshold change rate to change the threshold less
 
