@@ -164,10 +164,10 @@ function handleKeyDown(event) {
     // Decrease threshold
     threshold = Math.max(threshold - thresholdChangeRate, 0.0);
     document.getElementById('thresholdvalue').textContent = threshold.toFixed(3);
-  } else if (event.key === '2') {
+  } else if (event.key === 'w') {
     // Decrease threshold change rate
     thresholdChangeRate = Math.max(thresholdChangeRate / 1.1, 0.0001);
-  } else if (event.key === 'w') {
+  } else if (event.key === '2') {
     // Increase threshold change rate
     thresholdChangeRate = Math.min(thresholdChangeRate * 1.1, 1.0);
   }
