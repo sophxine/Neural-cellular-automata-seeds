@@ -19,8 +19,8 @@
 # C: clear grid
 # Q: Increase threshold to have less cells
 # 1: Decrease threshold to have more cells
-# W: Decrease threshold change rate to change the threshold less
 # 2: Increase threshold change rate to change the threshold more
+# W: Decrease threshold change rate to change the threshold less
 
 # Tips:
 # If it's a lot too explosive or sparse consider modifying the initial threshold, though you can also explore explosive/sparse seeds by changing the threshold.
