@@ -17,10 +17,10 @@
 # S: save model with the name model_weights
 # Tab: simulate a new soups
 # C: clear grid
-# 1: Decrease threshold to have more cells
 # Q: Increase threshold to have less cells
-# 2: Increase threshold change rate to change the threshold more
+# 1: Decrease threshold to have more cells
 # W: Decrease threshold change rate to change the threshold less
+# 2: Increase threshold change rate to change the threshold more
 
 # Tips:
 # If it's a lot too explosive or sparse consider modifying the initial threshold, though you can also explore explosive/sparse seeds by changing the threshold.
@@ -259,6 +259,18 @@ while running:
                 draw_radius += 1
             elif event.key == pygame.K_m:  
                 draw_radius = max(1, draw_radius - 1)
+    # Preview the grid when dragging the slider
+    if dragging:
+        screen.fill(WHITE)
+        preview_grid = np.where(predicted_state > threshold, 1, 0)
+        for y in range(GRID_HEIGHT):
+            for x in range(GRID_WIDTH):
+                if preview_grid[y, x] == 1:
+                    cell_rect = pygame.Rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+                    pygame.draw.rect(screen, BLACK, cell_rect, 0)  # Filled rectangle for the cell
+                    pygame.draw.rect(screen, WHITE, cell_rect, 2)  # Thicker border
+        grid = np.where(predicted_state > threshold, 1, 0)
+
     if clear_grid:
         screen.fill(WHITE)
         clear_grid = False
