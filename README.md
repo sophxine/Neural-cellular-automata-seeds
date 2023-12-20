@@ -22,10 +22,10 @@ Currently drawing and erasing doesnt work on the website version, and you cant s
 1. Left mouse button: draw
 2. Right mouse button: erase
 3. Space: pause/unpause
-4. S: save model with the name model_weights
+4. s: saves the model with the name model_weights, or saves the generator and discriminator weights
 5. Tab: simulate a new soups
-6. C: clear grid
-7. 1: increase threshold - less black cells 
+6. c: clear grid
+7. 1: increase threshold - less black cells (I'm not sure whether it's more intuitive to swap 1 and q or not)
 8. q: decrease threshold - more white cells
 9. 2: increase threshold change rate
 11. w: decrease threshold change rate
