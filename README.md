@@ -35,3 +35,6 @@ Currently drawing and erasing doesnt work on the website version, and you cant s
 2. Multi-state-NCAv1: The same but with multiple states, controlled by the same neural network.
 3. NCAv2: An agent-based version of the neural cellular automata, agents that can create or kill cells. It seems to create more complex patterns with random weights.
 4. ganca: A GAN(generative adverserial network) version of the neural cellular automata. It is very unstable but if you stabelize it, it produces similar results to NCAv1.
+
+# Practical applications
+No clue.
