@@ -217,7 +217,8 @@ while running:
                 grid = np.random.choice([0, 1], size=(GRID_HEIGHT, GRID_WIDTH)).astype(np.uint8)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_s:
-                model.save_weights(f"model_weights.h5")
+                generator.save("generator_model.h5")
+                discriminator.save("discriminator_model.h5") 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
                 threshold+=threshold_change_rate
