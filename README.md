@@ -37,4 +37,4 @@ Currently drawing and erasing doesnt work on the website version, and you cant s
 4. ganca: A GAN(generative adverserial network) version of the neural cellular automata. It is very unstable but if you stabelize it, it produces similar results to NCAv1.
 
 # Practical applications
-No clue.
+No idea about any.
