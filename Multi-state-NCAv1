@@ -5,18 +5,19 @@ import tensorflow as tf
 import pygame
 import scipy.signal
 import colorsys
-
 # Initialize pygame
 pygame.init()
 
 # Constants
+threshold=0.33 # Initial threshold
+threshold_change_rate=0.001 # Initial threshold rate change
+NUM_STATES =3 # Number of states
+
 WIDTH, HEIGHT = 800, 600
 CELL_SIZE = 10
 GRID_WIDTH = WIDTH // CELL_SIZE
 GRID_HEIGHT = HEIGHT // CELL_SIZE
 FPS = 60
-threshold=0.5
-NUM_STATES = 31
 WHITE = (255, 255, 255)
 
 def generate_random_color():
@@ -42,22 +43,40 @@ grid = np.random.choice(range(NUM_STATES), size=(GRID_HEIGHT, GRID_WIDTH))
 kernel = np.array([[1, 1, 1],
                    [1, 0, 1],
                    [1, 1, 1]])
-
+# Create a neural network with NUM_STATES output channels
+model = tf.keras.Sequential([
+    tf.keras.layers.Input(shape=(GRID_HEIGHT, GRID_WIDTH, 1)),
+    tf.keras.layers.Conv2D(16, (3, 3), activation='relu', padding='same'),
+    tf.keras.layers.Conv2D(16, (3, 3), activation='swish', padding='same'),
+    tf.keras.layers.Conv2D(NUM_STATES, (3, 3), activation='softmax', padding='same')
+])
 # Create the pygame window
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Multi state NCA")
 
 clock = pygame.time.Clock()
 
-# Create a neural network with NUM_STATES output channels
-model = tf.keras.Sequential([
-    tf.keras.layers.Input(shape=(GRID_HEIGHT, GRID_WIDTH, 1)),
-    tf.keras.layers.Conv2D(16, (3, 3), activation='relu', padding='same'),
-    tf.keras.layers.Conv2D(16, (3, 3), activation='swish', padding='same'),
-    tf.keras.layers.Conv2D(36, (3, 3), activation='swish', padding='same'),
+# Set up slider parameters
+slider_x = 20
+slider_y = 40
+slider_width = 100
+slider_height = 10
+slider_color = (0, 128, 255)
 
-    tf.keras.layers.Conv2D(NUM_STATES, (3, 3), activation='softmax', padding='same')
-])
+# Set up font
+font = pygame.font.Font(None, 32)
+
+# Function to draw the float slider
+def draw_slider():
+    global text2
+    pygame.draw.rect(screen, slider_color, (slider_x, slider_y, slider_width, slider_height))
+    pygame.draw.circle(screen, slider_color, (int(slider_x + slider_width * threshold), slider_y + slider_height // 2), 9)
+    text = font.render(f"Threshold: {threshold:.5f}", True, (0, 128, 255))
+    text2 = font.render(f"threshold change rate: {threshold_change_rate:.5f}", True, (0, 128, 255))       
+    screen.blit(text, (slider_x, slider_y - 30))
+    screen.blit(text2, (slider_x, slider_y+ 30))
+    
+
 
 
 # Function to draw on the grid
@@ -163,7 +182,19 @@ while running:
             if event.key == pygame.K_p:  
                 draw_radius += 1
             elif event.key == pygame.K_m:  
-                draw_radius = max(1, draw_radius - 1)        
+                draw_radius = max(1, draw_radius - 1)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_q:
+                threshold+=threshold_change_rate
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                threshold-=threshold_change_rate
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w:
+                threshold_change_rate=threshold_change_rate/10
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_2:
+                threshold_change_rate=threshold_change_rate*10 
     if clear_grid:
         screen.fill(WHITE)
         clear_grid = False
