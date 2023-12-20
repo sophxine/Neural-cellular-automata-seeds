@@ -1,3 +1,4 @@
+# Currently you can't use the slider
 import numpy as np
 import tensorflow as tf
 import pygame
