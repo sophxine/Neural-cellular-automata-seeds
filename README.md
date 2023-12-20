@@ -3,7 +3,7 @@
 The web version has a memory leakage issue so if you use it proceed with caution, it should stop before crashing the browser though.
 Flashing can occur in all versions, except NCAv1 when it is unmodified.
 
-This convolutional neural network is a simple neural cellular automata that tries to approximate a two state cellular automata rule(any kind of rule works), and create variations of them with a threshold. For example it can learn the rules of Conway's Game of Life as if it was Conway's Game of Life.
+This convolutional neural network is a neural cellular automata that tries to approximate a two state cellular automata rule(any kind of rule works), and create variations of them with a threshold. For example it can learn the rules of Conway's Game of Life as if it was Conway's Game of Life.
 
 The example model cgol.h5 is Conway's Game of Life trained to have loss of approximately 0.00000000001.
 
@@ -29,3 +29,9 @@ Currently drawing and erasing doesnt work on the website version, and you cant s
 8. q: decrease threshold - more white cells
 9. 2: increase threshold change rate
 11. w: decrease threshold change rate
+
+# Versions
+NCAv1: A simple convolutional neural network that learns the rule B2/S23, it is currently the only version with training.
+Multi-state-NCAv1: The same but with multiple states, controlled by the same neural network.
+NCAv2: An agent-based version of the neural cellular automata, agents that can create or kill cells. It seems to create more complex patterns.
+ganca: A GAN(generative adverserial network) version of it. It is very unstable but if you stabelize it, it produces similar results to NCAv1.
