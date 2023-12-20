@@ -9,9 +9,9 @@ import colorsys
 pygame.init()
 
 # Constants
-threshold=0.33 # Initial threshold
-threshold_change_rate=0.001 # Initial threshold rate change
-NUM_STATES =3 # Number of states
+threshold = 0.33 # Initial threshold
+threshold_change_rate = 0.001 # Initial threshold rate change
+NUM_STATES = 3 # Number of states
 
 WIDTH, HEIGHT = 800, 600
 CELL_SIZE = 10
@@ -53,7 +53,6 @@ model = tf.keras.Sequential([
 # Create the pygame window
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Multi state NCA")
-
 clock = pygame.time.Clock()
 
 # Set up slider parameters
@@ -76,9 +75,6 @@ def draw_slider():
     screen.blit(text, (slider_x, slider_y - 30))
     screen.blit(text2, (slider_x, slider_y+ 30))
     
-
-
-
 # Function to draw on the grid
 def draw_on_grid(mouse_pos, value=1):
     x, y = mouse_pos
