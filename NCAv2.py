@@ -177,8 +177,9 @@ while running:
                     action = np.random.choice([0, 1, 2], p=action_probabilities[0, y, x])
 
                     # Take action based on the sampled value
-                    if action == 0:  # Move
-                        pass  # Implement another action, for example movement.
+                    if action == 0:
+                        # Implement another action, for example movement.
+                        pass 
                     elif action == 1:  # Place
                         grid[y, x] = 1
                     elif action == 2:  # Kill
@@ -187,8 +188,7 @@ while running:
         # Apply threshold to the grid based on the neural network's prediction
         if not drawing_paused and not simulation_paused:
             grid = np.where(action_probabilities[0, :, :, 1] > threshold, 1, 0)
-        
-                        
+                          
         screen.fill(WHITE)
         for y in range(GRID_HEIGHT):
             for x in range(GRID_WIDTH):
