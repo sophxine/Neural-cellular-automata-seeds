@@ -178,7 +178,7 @@ while running:
 
                     # Take action based on the sampled value
                     if action == 0:  # Move
-                        pass  # Implement move logic
+                        pass  # Implement another action, for example movement.
                     elif action == 1:  # Place
                         grid[y, x] = 1
                     elif action == 2:  # Kill
