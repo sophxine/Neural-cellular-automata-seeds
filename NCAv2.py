@@ -6,15 +6,16 @@ import pygame
 
 # Initialize pygame
 pygame.init()
-threshold_change_rate=0.001 #Initial threshold change rate 
+
 
 # Constants
+threshold = 0.33 # Initial threshold
+threshold_change_rate=0.001 # Initial threshold change rate 
 WIDTH, HEIGHT = 800, 600
 CELL_SIZE = 10
 GRID_WIDTH = WIDTH // CELL_SIZE
 GRID_HEIGHT = HEIGHT // CELL_SIZE
 FPS = 60
-threshold = 0.33
 
 # Colors
 WHITE = (255, 255, 255)
