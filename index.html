@@ -95,7 +95,7 @@ let drawingPaused = false;
 let simulationPaused = false;
 let manualPause = false;
 let dragging = false;
-
+let sliderX;
 function handleMouseDown(event) {
   if (sliderX <= event.clientX && event.clientX <= sliderX + sliderWidth && sliderY <= event.clientY && event.clientY <= sliderY + sliderHeight) {
     dragging = true;
@@ -185,10 +185,12 @@ function update() {
     clearGrid = false;
   } else {
     if (!drawingPaused && !simulationPaused) {
+      tf.tidy(()=>{
+
+      
       const reshapedGrid = tf.tensor4d(grid.flat().flat(), [1, GRID_HEIGHT, GRID_WIDTH, 1]);
-
       const predictedState = model.predict(reshapedGrid).dataSync();
-
+    
 
 
 
@@ -197,7 +199,7 @@ function update() {
           grid[i][j] = predictedState[i * GRID_WIDTH + j] > threshold ? 1 : 0;
         }
       }
-    }
+    })}
     ctx.fillStyle = `rgb(${WHITE[0]}, ${WHITE[1]}, ${WHITE[2]})`;
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
     for (let y = 0; y < GRID_HEIGHT; y++) {
